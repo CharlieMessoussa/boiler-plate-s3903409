@@ -150,3 +150,36 @@ Directly addressing the "Edge Cases" section of Fuyu's requirements:
 - [ ] Document updated
 
 The final tick happens after Fuyu confirms the design meets her requirements. The card then moves to the Reviewing bucket for Dev pickup.
+
+---
+
+## Update — Read more pattern for long blurbs
+
+**Added:** 15 August 2026, following BA feedback (Fuyu)
+
+The original design let long blurbs wrap freely inside their card. That works for length but produces uneven card heights when one member has a lot to say and the rest are short — the roster starts to look ragged and the eye gets pulled to the longest card.
+
+To keep the row rhythm consistent, blurbs now truncate at ~2 lines with a **"Read more"** link when they exceed that length.
+
+### Behaviour
+
+- Blurbs at or under ~2 lines render as-is. No toggle appears.
+- Blurbs longer than that are visually clipped at 2 lines with an ellipsis (`…`).
+- A small **Read more** link appears directly under the truncated text, styled in the same teal accent as other interactive links.
+- Clicking **Read more** expands the blurb inline (no modal, no page shift). The link swaps to **Show less** in the same position, so users can collapse it again.
+
+### Why this shape
+
+- Inline expansion keeps focus on the person the user is reading about. A modal would break flow for a small piece of copy.
+- Card-level truncation (not word-count truncation) means the pattern only triggers when the layout actually needs it — short bios stay untouched.
+- Reusing the teal accent keeps the interactive vocabulary consistent with the login page's "Create an account" link and the primary CTA styling.
+
+### Where it appears in the mockup
+
+Only Kazi's card (UX Designer) currently shows the truncation state, since the other three blurbs are within the 2-line limit. This is deliberate — it demonstrates the pattern without cluttering every card, and reflects how the pattern will behave in production: it only exists when it needs to.
+
+### Edge cases covered by this addition
+
+- **Very long blurbs** — no longer push card heights out of balance.
+- **Short blurbs** — untouched, no unnecessary UI added.
+- **Mixed lengths across the roster** — cards stay visually aligned in the collapsed state; the expanded state grows only the card in question, without shifting neighbours in the list layout.
