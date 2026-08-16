@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Caveat } from 'next/font/google'
 import { Providers } from '@/providers'
 import './globals.css'
 
@@ -13,6 +13,11 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+const caveat = Caveat({
+  variable: '--font-caveat',
+  subsets: ['latin'],
+})
+
 export const metadata: Metadata = {
   title: {
     template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME ?? 'App'}`,
@@ -23,7 +28,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
       </body>

@@ -8,13 +8,13 @@ import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
 import { EmptyState } from '@/components/shared/EmptyState'
 
 export function NotesList() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const { data: notes, loading } = useCollection(
-    getNotesCollection(),
+    user ? getNotesCollection() : null,
     where('uid', '==', user?.uid ?? '')
   )
 
-  if (loading) return <LoadingSpinner />
+  if (authLoading || loading) return <LoadingSpinner />
   if (notes.length === 0) return <EmptyState title="No notes yet" />
 
   return (

@@ -19,11 +19,14 @@ interface UseCollectionResult<T> {
 /**
  * Subscribe to a Firestore collection with real-time updates.
  *
+ * Pass `null` for `collectionRef` to defer subscribing — e.g. while auth state
+ * is still loading and a `where('uid', '==', user.uid)` constraint isn't ready yet.
+ *
  * @example
  * const { data, loading, error } = useCollection(usersCollection, where('role', '==', 'admin'))
  */
 export function useCollection<T extends DocumentData>(
-  collectionRef: CollectionReference<T>,
+  collectionRef: CollectionReference<T> | null,
   ...queryConstraints: QueryConstraint[]
 ): UseCollectionResult<T> {
   const [data, setData] = useState<T[]>([])
@@ -31,6 +34,10 @@ export function useCollection<T extends DocumentData>(
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
+    if (!collectionRef) {
+      return
+    }
+
     const q: Query<T> =
       queryConstraints.length > 0
         ? query(collectionRef, ...queryConstraints)
@@ -51,6 +58,10 @@ export function useCollection<T extends DocumentData>(
     return () => unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectionRef])
+
+  if (!collectionRef) {
+    return { data: [], loading: true, error: null }
+  }
 
   return { data, loading, error }
 }
